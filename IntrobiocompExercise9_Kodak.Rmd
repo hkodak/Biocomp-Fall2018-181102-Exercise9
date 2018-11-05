@@ -1,0 +1,62 @@
+---
+title: "IntroBioCompExercise9_Kodak"
+author: "Haley Kodak"
+date: "November 5, 2018"
+output: word_document
+---
+
+#Exercise 9 - Analysis and plotting
+
+1. Find some data on two variables that you would expect to be related to each other. These data can come from your own research, your daily life, or the internet. Enter those data into a text ???le or Excel and then save a text ???le, and write a script that loads this text ???le and produces a scatter plot of those two variables that includes a trend line.
+
+```{r}
+library(ggplot2)
+timber = read.csv("timber.csv", header = TRUE)
+str(timber)
+head(timber)
+
+```
+
+I will look at the relatinship between girth and hieght of trees 
+```{r}
+x=timber$height #assign x and y 
+y=timber$girth
+
+a=ggplot(data=timber,aes(x=height,y=girth)) #assign labels and graph
+a+geom_point()+coord_cartesian()+stat_smooth(method="lm",formula=y~x)
+#plot data points and trendline
+
+
+```
+----------------------------------------
+
+2. Given the data in "data.txt". Write a script that generates two ???gures that sumamrize the data. First, show a barplot of the means of the four populations. Second, show a scatter plot of all of the observations. You may want to "jitter" the points (geom_jitter()) to make it easier to see all of the observations within a population in your scatter plot. Alternatively, you could also try setting the alpha argument in geom_scatterplot()
+to 0.1. Do the bar and scatter plots tell you di???erent stories? Why?
+
+```{r}
+data = read.table("data.txt", sep = ",", header = TRUE)
+str(data)
+head(data)
+```
+
+Barplot of means 
+```{r}
+meanObservations= mean(data$observations)
+b=d=ggplot(data=data)
+b+geom_bar(aes(x=as.factor(region),y=observations),stat="summary",fun.y="mean",fill='black',color='black')+theme_classic()
+
+```
+
+Scatter plot of all the observations 
+```{r}
+x=data$region #assign x and y 
+y=data$observations
+
+c=ggplot(data=data,aes(x=region,y=observations)) #assign labels and graph
+c+geom_point()+coord_cartesian()+stat_smooth(method="lm",formula=y~x)+geom_jitter()
+#plot data points and trendline
+
+```
+
+
+The bar plot allows comparison of the mean, but the scatter plot allows comparrison of the spread of the data for each region
